@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Admin</title>
+</head>
+<body>
+
+  <h1>Panel Administrador</h1>
+
+<select id="roomCode">
+  <option value="TEST">TEST</option>
+  <option value="EVENTO2026">EVENTO2026</option>
+  <option value="QUIZ123">QUIZ123</option>
+</select>
+
+  <button id="startButton" onclick="startGame()">
+  Iniciar partida
+</button>
+
+<hr>
+<hr>
+
+<h3>Crear nuevo evento</h3>
+
+<input id="newRoom" placeholder="Nombre del evento">
+
+<button onclick="createRoom()">
+  Crear evento
+</button>
+<h2>Crear pregunta</h2>
+
+<input
+  type="text"
+  id="question"
+  placeholder="Pregunta"
+>
+
+<select id="questionRoomCode"></select>
+
+<br><br>
+
+<br><br>
+
+<input type="text" id="option1" placeholder="Opción A">
+<br><br>
+
+<input type="text" id="option2" placeholder="Opción B">
+<br><br>
+
+<input type="text" id="option3" placeholder="Opción C">
+<br><br>
+
+<input type="text" id="option4" placeholder="Opción D">
+
+<br><br>
+
+<input
+  type="number"
+  id="correct"
+  placeholder="Respuesta correcta (1-4)"
+  min="1"
+  max="4"
+>
+
+<br><br>
+
+<button onclick="saveQuestion()">
+  Guardar pregunta
+</button>
+<hr>
+
+<h2>Preguntas guardadas</h2>
+<select id="filterRoomCode"></select>
+<button onclick="filterQuestions()">
+  Filtrar
+</button>
+
+<br><br>
+
+<ul id="questionsList"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+     let rooms = [];
+    const socket = io();
+    let allQuestions = [];
+    socket.emit("getQuestions");
+    socket.emit("getRooms");
+    function startGame() {
+
+      const roomCode =
+        document.getElementById("roomCode").value.trim();
+            
+      if (!roomCode) {
+        alert("Ingresá un código");
+        return;
+      }
+
+      document.getElementById("startButton").disabled = true;
+
+      socket.emit("startGame", {
+        roomCode
+      });
+    }
+
+    function createRoom() {
+
+  const room =
+    document.getElementById("newRoom").value.trim();
+
+  if (!room) return;
+
+  socket.emit("createRoom", room);
+
+}
+
+const filterSelect =
+  document.getElementById("filterRoomCode");
+
+filterSelect.innerHTML = "";
+
+rooms.forEach((room) => {
+
+  const option = document.createElement("option");
+
+  option.value = room;
+  option.innerText = room;
+
+  filterSelect.appendChild(option);
+
+});
+function saveQuestion() {
+
+  const question =
+    document.getElementById("question").value.trim();
+
+const roomCode =
+  document.getElementById("questionRoomCode").value;
+
+  const option1 =
+    document.getElementById("option1").value.trim();
+
+  const option2 =
+    document.getElementById("option2").value.trim();
+
+  const option3 =
+    document.getElementById("option3").value.trim();
+
+  const option4 =
+    document.getElementById("option4").value.trim();
+
+  const correct =
+    document.getElementById("correct").value.trim();
+
+  if (
+    !question ||
+    !option1 ||
+    !option2 ||
+    !option3 ||
+    !option4 ||
+    !correct
+  ) {
+    alert("Completá todos los campos");
+    return;
+  }
+
+
+  socket.emit("saveQuestion", {
+    question,
+    roomCode,
+    options: [
+      option1,
+      option2,
+      option3,
+      option4
+    ],
+    correct
+  });
+
+}
+socket.on("roomsList", (data) => {
+
+  rooms = data;
+
+  // SELECT principal (start game)
+  const select =
+    document.getElementById("roomCode");
+
+  select.innerHTML = "";
+
+  rooms.forEach((room) => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = room;
+    option.innerText = room;
+
+    select.appendChild(option);
+
+  });
+
+  // SELECT de preguntas
+  const selectQuestion =
+    document.getElementById("questionRoomCode");
+
+  selectQuestion.innerHTML = "";
+
+  rooms.forEach((room) => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = room;
+    option.innerText = room;
+
+    selectQuestion.appendChild(option);
+
+  });
+  // SELECT de filtro
+
+
+  filterSelect.innerHTML = "";
+
+  rooms.forEach((room) => {
+
+    const option = document.createElement("option");
+
+    option.value = room;
+    option.innerText = room;
+
+    filterSelect.appendChild(option);
+
+  });
+});
+
+function renderQuestions(questions) {
+
+  const questionsList =
+    document.getElementById("questionsList");
+
+  questionsList.innerHTML = "";
+
+  questions.forEach((question) => {
+
+    const li = document.createElement("li");
+
+    li.style.cursor = "pointer";
+
+    // 🔹 header de la pregunta
+    const title = document.createElement("div");
+    title.innerText =
+      "[" + question.roomCode + "] " + question.question;
+
+    // 🔹 contenedor de detalles oculto
+    const details = document.createElement("div");
+    details.style.display = "none";
+    details.style.marginLeft = "15px";
+
+    details.innerHTML = `
+      <p>A: ${question.options[0]}</p>
+      <p>B: ${question.options[1]}</p>
+      <p>C: ${question.options[2]}</p>
+      <p>D: ${question.options[3]}</p>
+      <strong>Correcta: ${question.correct}</strong>
+    `;
+
+    // 🔹 toggle click
+    title.onclick = () => {
+      details.style.display =
+        details.style.display === "none" ? "block" : "none";
+    };
+
+    // botón borrar
+    const deleteButton =
+      document.createElement("button");
+
+    deleteButton.innerText = "X";
+
+    deleteButton.onclick = (e) => {
+      e.stopPropagation(); // evita abrir/cerrar
+
+      const confirmDelete = confirm(
+        "¿Seguro que querés eliminar esta pregunta?"
+      );
+
+      if (!confirmDelete) return;
+
+      socket.emit("deleteQuestion", question.id);
+    };
+
+    li.appendChild(title);
+    li.appendChild(details);
+    li.appendChild(deleteButton);
+
+    questionsList.appendChild(li);
+  });
+}
+function filterQuestions() {
+
+  const filterRoomCode =
+    document.getElementById("filterRoomCode").value;
+
+  const filteredQuestions =
+    allQuestions.filter(q =>
+      q.roomCode === filterRoomCode
+    );
+
+  renderQuestions(filteredQuestions);
+
+}
+socket.on("questionsList", (questions) => {
+
+  allQuestions = questions;
+
+  renderQuestions(questions);
+
+});
+
+  </script>
+
+</body>
+</html>

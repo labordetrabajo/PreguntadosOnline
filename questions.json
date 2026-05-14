@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "roomCode": "Test",
+    "question": "color remera roja",
+    "options": [
+      "roja",
+      "violeta",
+      "azul",
+      "verde"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 2,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 3,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 4,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 5,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 6,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 7,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 8,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 9,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 10,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 11,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 12,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 13,
+    "roomCode": "EVENTO2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 14,
+    "roomCode": "evento2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 15,
+    "roomCode": "evento2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 16,
+    "roomCode": "evento2026",
+    "question": "color cielo",
+    "options": [
+      "celeste",
+      "marron",
+      "violeta",
+      "negro"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 17,
+    "roomCode": "EVENTO2026",
+    "question": "quien es mas pequeño?",
+    "options": [
+      "elefante",
+      "hormiga",
+      "cocodrilo",
+      "mesi"
+    ],
+    "correct": "4"
+  },
+  {
+    "id": 18,
+    "roomCode": "pruebaevento",
+    "question": "color amarillo",
+    "options": [
+      "rojo",
+      "amarillo",
+      "azul",
+      "celeste"
+    ],
+    "correct": "2"
+  },
+  {
+    "id": 19,
+    "roomCode": "EVENTO2026",
+    "question": "de que color es el cielo",
+    "options": [
+      "azul",
+      "marron",
+      "rojo",
+      "violeta"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 20,
+    "roomCode": "TEST",
+    "question": "color del pasto",
+    "options": [
+      "verde",
+      "rojo",
+      "marron",
+      "violeta"
+    ],
+    "correct": "1"
+  },
+  {
+    "id": 21,
+    "roomCode": "TEST",
+    "question": "3+2",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correct": "1"
+  }
+]

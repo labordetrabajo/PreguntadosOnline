@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Preguntados Online</title>
+</head>
+<body>
+
+  <h1>Preguntados Online</h1>
+
+  <input type="text" id="roomCode" placeholder="Código del evento">
+  <input type="text" id="nickname" placeholder="Tu nombre">
+
+  <button onclick="joinGame()">
+    Entrar
+  </button>
+
+  <h2>Jugadores conectados</h2>
+
+  <ul id="players"></ul>
+  <h2>Leaderboard</h2>
+
+<ul id="leaderboard"></ul>
+
+  <h2 id="questionText"></h2>
+
+<div id="options"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+   let answered = false;
+
+    const socket = io();
+
+    function joinGame() {
+
+      const nickname =
+        document.getElementById("nickname").value.trim();
+
+      const roomCode =
+        document.getElementById("roomCode").value.trim();
+
+      if (!nickname) {
+        alert("Ingresá un nombre");
+        return;
+      }
+
+      if (!roomCode) {
+        alert("Ingresá el código del evento");
+        return;
+      }
+
+      socket.emit("joinGame", {
+        nickname,
+        roomCode
+      });
+    }
+
+    socket.on("playersUpdated", (players) => {
+
+      const playersList =
+        document.getElementById("players");
+
+      playersList.innerHTML = "";
+
+      players.forEach((player) => {
+
+        const li = document.createElement("li");
+
+        li.innerText = player.nickname;
+
+        playersList.appendChild(li);
+      });
+    });
+
+    socket.on("leaderboardUpdated", (players) => {
+
+  const leaderboard =
+    document.getElementById("leaderboard");
+
+  leaderboard.innerHTML = "";
+
+  players.forEach((player) => {
+
+    const li = document.createElement("li");
+
+    li.innerText =
+      player.nickname +
+      " - " +
+      player.score;
+
+    leaderboard.appendChild(li);
+
+  });
+
+});
+
+    socket.on("invalidRoom", (message) => {
+
+      alert(message);
+
+    });
+
+    socket.on("gameStarted", () => {
+
+      alert("La partida comenzó");
+
+    });
+     
+    socket.on("newQuestion", (question) => {
+   answered = false;
+  document.getElementById("questionText").innerText =
+    question.question;
+
+  const optionsDiv =
+    document.getElementById("options");
+
+  optionsDiv.innerHTML = "";
+
+  question.options.forEach((opt, index) => {
+
+    const btn = document.createElement("button");
+
+    btn.innerText = opt;
+
+btn.onclick = () => {
+
+  if (answered) {
+    return;
+  }
+
+  answered = true;
+
+  socket.emit("answerQuestion", {
+    roomCode:
+      document.getElementById("roomCode").value,
+
+    answer: index + 1
+  });
+
+};
+
+    optionsDiv.appendChild(btn);
+  });
+});
+
+  </script>
+
+</body>
+</html>
