@@ -1,254 +1,98 @@
 [
   {
-    "id": 1,
-    "roomCode": "Test",
-    "question": "color remera roja",
+    "id": 1779190391483,
+    "roomCode": "silfab",
+    "question": "En cuántos países está Silfab hoy fuera de Argentina?",
     "options": [
-      "roja",
-      "violeta",
-      "azul",
-      "verde"
+      "Bolivia – Paraguay  - Uruguay y Perú",
+      "Bolivia – Paraguay",
+      "Bolivia – Paraguay  - Uruguay",
+      "Uruguay"
     ],
     "correct": "1"
   },
   {
-    "id": 2,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
+    "id": 1779190518489,
+    "roomCode": "silfab",
+    "question": "Cuál fue el primer producto que marcó a Silfab en sus inicios?",
     "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
+      "Nebulizador",
+      "Vaporizador",
+      "Aspirador",
+      "Inhalador"
     ],
     "correct": "1"
   },
   {
-    "id": 3,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
+    "id": 1779190552979,
+    "roomCode": "silfab",
+    "question": "Cuántos productos se lanzaron desde el inicio del año a hoy en canal Farmacia?",
     "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 4,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 5,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 6,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 7,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 8,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 9,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 10,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 11,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 12,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 13,
-    "roomCode": "EVENTO2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 14,
-    "roomCode": "evento2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 15,
-    "roomCode": "evento2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 16,
-    "roomCode": "evento2026",
-    "question": "color cielo",
-    "options": [
-      "celeste",
-      "marron",
-      "violeta",
-      "negro"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 17,
-    "roomCode": "EVENTO2026",
-    "question": "quien es mas pequeño?",
-    "options": [
-      "elefante",
-      "hormiga",
-      "cocodrilo",
-      "mesi"
+      "10",
+      "8",
+      "32",
+      "9"
     ],
     "correct": "4"
   },
   {
-    "id": 18,
-    "roomCode": "pruebaevento",
-    "question": "color amarillo",
+    "id": 1779190597490,
+    "roomCode": "silfab",
+    "question": "Siendo líderes en categoría nebulizadores, Cúantos Sku tiene Silfab activos?",
     "options": [
-      "rojo",
-      "amarillo",
-      "azul",
-      "celeste"
+      "11",
+      "12",
+      "13",
+      "15"
     ],
-    "correct": "2"
+    "correct": "3"
   },
   {
-    "id": 19,
-    "roomCode": "EVENTO2026",
-    "question": "de que color es el cielo",
+    "id": 1779190657517,
+    "roomCode": "silfab",
+    "question": "En que año se fundó Silfab?",
     "options": [
-      "azul",
-      "marron",
-      "rojo",
-      "violeta"
+      "1950",
+      "1982",
+      "1981",
+      "1990"
+    ],
+    "correct": "3"
+  },
+  {
+    "id": 1779190725276,
+    "roomCode": "silfab",
+    "question": "Cuál es la ventaja de que Silfab fabrique en Argentina?",
+    "options": [
+      "Menor Tiempo de entrega",
+      "Soporte técnico Local",
+      "Stock Permanente",
+      "Todas las anteriores"
+    ],
+    "correct": "4"
+  },
+  {
+    "id": 1779190796792,
+    "roomCode": "silfab",
+    "question": "Que significa el nombre Silfab?",
+    "options": [
+      "Silvestrin Fabris",
+      "Silvestrin Farmacia",
+      "Fabricación Silvestrin",
+      "Fabris Silvestrinni"
     ],
     "correct": "1"
   },
   {
-    "id": 20,
-    "roomCode": "TEST",
-    "question": "color del pasto",
+    "id": 1779190832095,
+    "roomCode": "silfab",
+    "question": "Hace más de cuantos años que nos eligen para representar Marcas internacionales?",
     "options": [
-      "verde",
-      "rojo",
-      "marron",
-      "violeta"
-    ],
-    "correct": "1"
-  },
-  {
-    "id": 21,
-    "roomCode": "TEST",
-    "question": "3+2",
-    "options": [
-      "5",
-      "6",
-      "7",
+      "15",
+      "25",
+      "11",
       "8"
     ],
-    "correct": "1"
+    "correct": "2"
   }
 ]

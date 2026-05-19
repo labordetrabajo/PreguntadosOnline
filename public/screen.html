@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla Evento – Silfab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-dark:  #0D2B6E;
+      --blue-mid:   #1565C0;
+      --blue-light: #1E88E5;
+      --accent:     #7CB342;
+      --accent-glow:rgba(124,179,66,0.4);
+      --white:      #FFFFFF;
+      --white-60:   rgba(255,255,255,0.6);
+      --white-12:   rgba(255,255,255,0.12);
+      --gold:       #FFD54F;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', 'DIN Pro', Arial, sans-serif;
+      background: var(--blue-dark);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* ── FONDO ANIMADO ── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .bg-circle-1 {
+      position: absolute;
+      width: 900px; height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(21,101,192,0.55) 0%, transparent 70%);
+      top: -200px; left: -200px;
+      animation: drift1 18s ease-in-out infinite;
+    }
+    .bg-circle-2 {
+      position: absolute;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(30,136,229,0.4) 0%, transparent 70%);
+      bottom: -100px; right: -150px;
+      animation: drift2 22s ease-in-out infinite;
+    }
+    .bg-wave-bar {
+      position: absolute;
+      bottom: 0; left: -10%; width: 120%; height: 45%;
+      background: rgba(13,43,110,0.6);
+      border-radius: 60% 60% 0 0;
+    }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-20px)} }
+
+    /* ── WRAPPER ── */
+    .wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 1200px;
+      padding: 30px 40px 60px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .logo-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .logo-icon { height: 52px; flex-shrink: 0; }
+    .logo-name { font-size: 30px; font-weight: 800; letter-spacing: 2px; }
+    .logo-name span { color: var(--accent); }
+    .room-pill {
+      background: var(--white-12);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 40px;
+      padding: 10px 22px;
+      font-size: 18px; font-weight: 600; letter-spacing: 1px;
+    }
+    .room-pill small { font-weight: 300; color: var(--white-60); font-size: 13px; display: block; letter-spacing: 0.5px; }
+
+    /* ── STATUS ── */
+    #status {
+      font-size: 54px; font-weight: 800;
+      text-align: center;
+      color: var(--gold);
+      min-height: 64px;
+      margin: 10px 0;
+      text-shadow: 0 0 40px rgba(255,213,79,0.4);
+    }
+
+    /* ── TIMER ── */
+    #timer {
+      font-size: 110px; font-weight: 900;
+      color: var(--accent);
+      text-shadow: 0 0 50px var(--accent-glow);
+      min-height: 120px;
+      text-align: center;
+      line-height: 1;
+      margin: 10px 0;
+      transition: color .3s;
+    }
+    #timer.urgent { color: #FF5252; text-shadow: 0 0 50px rgba(255,82,82,0.5); }
+
+    /* ── QUESTION ── */
+    #question {
+      font-size: 40px; font-weight: 700;
+      text-align: center;
+      max-width: 1000px;
+      line-height: 1.3;
+      margin: 20px 0 30px;
+      min-height: 52px;
+    }
+
+    /* ── OPTIONS ── */
+    #options {
+      width: 100%; max-width: 960px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+    .option {
+      background: var(--white-12);
+      border: 2px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      padding: 28px 30px;
+      font-size: 28px; font-weight: 600;
+      text-align: center;
+      line-height: 1.3;
+      display: flex; align-items: center; gap: 16px;
+      transition: all .3s;
+    }
+    .option-letter {
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800;
+    }
+    .option.correct {
+      background: rgba(46,125,50,0.55);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px rgba(124,179,66,0.4);
+    }
+    .option.correct .option-letter { background: var(--accent); }
+
+    /* ── PLAYERS COUNT ── */
+    #playersCount {
+      font-size: 18px; color: var(--white-60); font-weight: 300;
+      margin-bottom: 10px;
+    }
+
+    /* ── LEADERBOARD ── */
+    #leaderboardContainer {
+      width: 100%; max-width: 700px;
+      margin-top: 20px;
+    }
+    .lb-title {
+      text-align: center;
+      font-size: 16px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--white-60);
+      margin-bottom: 16px;
+    }
+    #leaderboard { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    #leaderboard li {
+      background: var(--white-12);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 16px 22px;
+      font-size: 26px; font-weight: 600;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    #leaderboard li:first-child {
+      background: rgba(124,179,66,0.18);
+      border-color: var(--accent);
+      font-size: 29px;
+    }
+    .lb-rank { width: 36px; color: var(--white-60); font-size: 20px; }
+    .lb-pts { color: var(--accent); font-weight: 800; }
+
+    /* ── WINNER ── */
+    #winner {
+      text-align: center;
+      font-size: 64px; font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 60px rgba(255,213,79,0.5);
+      line-height: 1.3;
+      margin-top: 30px;
+      animation: winner-in .6s ease-out;
+    }
+    @keyframes winner-in {
+      from { opacity:0; transform: scale(0.8) translateY(20px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+    <div class="bg-wave-bar"></div>
+  </div>
+
+  <div class="wrap">
+    <!-- HEADER -->
+    <div class="header">
+     <div class="logo-row">
+
+  <img src="/logo.png" alt="Silfab" class="logo-icon">
+
+   <!--<div class="logo-text">SIL<span>FAB</span></div>-->
+
+</div>
+      <div class="room-pill">
+        <small>Sala activa</small>
+        <span id="roomText">-</span>
+      </div>
+    </div>
+
+    <!-- PLAYERS -->
+    <div id="playersCount"></div>
+
+    <!-- STATUS / TIMER / QUESTION -->
+    <div id="status"></div>
+    <div id="timer"></div>
+    <div id="question"></div>
+
+    <!-- OPTIONS -->
+    <div id="options"></div>
+
+    <!-- LEADERBOARD -->
+    <div id="leaderboardContainer">
+      <div class="lb-title">Leaderboard</div>
+      <ul id="leaderboard"></ul>
+    </div>
+
+    <!-- WINNER -->
+    <div id="winner"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    // 🎧 sonidos
+const soundStart = new Audio("/sounds/start.mp3");
+const soundQuestion = new Audio("/sounds/question.mp3");
+const soundTick = new Audio("/sounds/tick.mp3");
+const soundCorrect = new Audio("/sounds/correct.mp3");
+const soundFinish = new Audio("/sounds/finish.mp3");
+    const params = new URLSearchParams(window.location.search);
+    const roomCode = params.get("room") || "TEST";
+    document.getElementById("roomText").innerText = roomCode;
+
+    socket.emit("joinGame", { nickname: "SCREEN_" + Date.now(), roomCode });
+
+    const letters = ["A","B","C","D"];
+    let countdown;
+
+    socket.on("gameStarted", () => {
+    soundStart.currentTime = 0;
+soundStart.play();
+      document.getElementById("winner").innerText = "";
+      let start = 3;
+      const st = document.getElementById("status");
+      st.innerText = "Comienza en " + start;
+      const iv = setInterval(() => {
+        start--;
+        if (start > 0) st.innerText = "Comienza en " + start;
+        else { clearInterval(iv); st.innerText = ""; }
+      }, 1000);
+    });
+
+    socket.on("playersUpdated", (players) => {
+      const real = players.filter(p => !p.nickname.startsWith("SCREEN_"));
+      document.getElementById("playersCount").innerText = real.length + " jugadores conectados";
+    });
+
+    socket.on("newQuestion", (question) => {
+    soundQuestion.currentTime = 0;
+soundQuestion.play();
+      clearInterval(countdown);
+      document.getElementById("winner").innerText = "";
+      document.getElementById("status").innerText = "";
+      document.getElementById("question").innerText = question.question;
+
+      const opt = document.getElementById("options");
+      opt.innerHTML = "";
+      question.options.forEach((o, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${o}</span>`;
+        opt.appendChild(div);
+      });
+
+      let timeLeft = question.questionTime;
+      const timerEl = document.getElementById("timer");
+      timerEl.innerText = timeLeft;
+      timerEl.classList.remove("urgent");
+
+      countdown = setInterval(() => {
+        timeLeft--;
+        timerEl.innerText = timeLeft;
+        if (timeLeft <= 3) timerEl.classList.add("urgent");
+        if (timeLeft <= 3) {
+  soundTick.currentTime = 0;
+  soundTick.play();
+}
+        if (timeLeft <= 0) clearInterval(countdown);
+      }, 1000);
+    });
+
+    socket.on("showCorrectAnswer", (correct) => {
+    soundCorrect.currentTime = 0;
+soundCorrect.play();
+      const opts = document.querySelectorAll(".option");
+      if (opts[correct - 1]) opts[correct - 1].classList.add("correct");
+    });
+
+    socket.on("leaderboardUpdated", (players) => {
+      const lb = document.getElementById("leaderboard");
+      lb.innerHTML = "";
+      players.filter(p => !p.nickname.startsWith("SCREEN_")).slice(0, 5).forEach((p, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="lb-rank">${i+1}</span><span>${p.nickname}</span><span class="lb-pts">${p.score} pts</span>`;
+        lb.appendChild(li);
+      });
+    });
+
+socket.on("gameEndedForce", () => {
+  alert("La partida fue finalizada por el administrador");
+  window.location.reload();
+});
+
+    socket.on("gameFinished", (players) => {
+    soundFinish.currentTime = 0;
+soundFinish.play();
+      document.getElementById("timer").innerText = "";
+      document.getElementById("question").innerText = "🏁 Partida finalizada";
+      document.getElementById("options").innerHTML = "";
+      const real = players.filter(p => !p.nickname.startsWith("SCREEN_"));
+      if (real.length > 0) {
+        const w = real[0];
+        document.getElementById("winner").innerHTML = `🏆 GANADOR<br><br>${w.nickname}<br><br>${w.score} puntos`;
+      }
+      
+    });
+  </script>
+</body>
+</html>

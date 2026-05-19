@@ -2,324 +2,620 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin – Silfab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .topbar-logo-img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+    /* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .2s ease;
+
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 360px;
+
+  background: white;
+
+  border-radius: 18px;
+  padding: 24px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue-dark);
+
+  margin-bottom: 10px;
+}
+
+.modal-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+.modal-btn {
+  flex: 1;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 13px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.modal-btn.cancel {
+  background: #EEF3FC;
+  color: var(--blue-dark);
+}
+
+.modal-btn.confirm {
+  background: var(--blue-mid);
+  color: white;
+}
+    :root {
+      --blue-dark:  #0D2B6E;
+      --blue-mid:   #1565C0;
+      --blue-light: #1E88E5;
+      --accent:     #7CB342;
+      --accent-dark:#558B2F;
+      --white:      #FFFFFF;
+      --bg:         #F0F4FA;
+      --card:       #FFFFFF;
+      --border:     #D0DCF0;
+      --text:       #0D2B6E;
+      --text-muted: #607DA8;
+      --danger:     #C62828;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', 'DIN Pro', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR / TOPBAR ── */
+    .topbar {
+      background: var(--blue-dark);
+      color: white;
+      padding: 0 32px;
+      height: 64px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 2px 12px rgba(13,43,110,0.35);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .topbar-logo svg { width: 32px; height: 32px; flex-shrink: 0; }
+    .topbar-logo-text {
+      font-size: 18px; font-weight: 700; letter-spacing: 1px;
+      color: white;
+    }
+    .topbar-logo-text span { color: var(--accent); }
+    .topbar-sub {
+      font-size: 12px; font-weight: 300; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(255,255,255,0.55);
+      margin-left: auto;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--blue-mid);
+      padding: 28px 0;
+      color: white;
+    }
+    .sidebar-section {
+      padding: 0 20px;
+      margin-bottom: 28px;
+    }
+    .sidebar-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      margin-bottom: 12px; padding-left: 4px;
+    }
+
+    /* Estado */
+    .state-box {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px; line-height: 1.8;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .state-box strong { color: var(--accent); }
+
+    /* Select sala */
+    .sidebar-select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: white;
+      font-family: inherit; font-size: 14px; font-weight: 500;
+      padding: 10px 14px;
+      cursor: pointer; outline: none;
+      margin-bottom: 8px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.6)'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    .sidebar-select option { background: var(--blue-dark); color: white; }
+
+    .time-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .time-row label { font-size: 13px; color: rgba(255,255,255,0.75); white-space: nowrap; }
+    .time-input {
+      width: 70px;
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: white; font-family: inherit; font-size: 14px;
+      padding: 8px 10px; outline: none; text-align: center;
+    }
+
+    /* Botones sidebar */
+    .btn-group { display: flex; flex-direction: column; gap: 8px; }
+    .btn {
+      width: 100%; padding: 11px 16px;
+      border: none; border-radius: 10px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.5px; cursor: pointer;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:hover:not(:disabled) { opacity: 0.85; transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.4; cursor: default; }
+    .btn-green  { background: var(--accent); color: white; }
+    .btn-ghost  { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-screen { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.15); }
+
+    /* ── MAIN ── */
+    .main { padding: 32px; overflow-y: auto; }
+    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(13,43,110,0.07);
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .card-icon {
+      width: 34px; height: 34px;
+      background: var(--blue-mid);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon svg { width: 18px; height: 18px; fill: white; }
+    .card-title { font-size: 15px; font-weight: 700; color: var(--blue-dark); }
+    .card-subtitle { font-size: 12px; color: var(--text-muted); }
+
+    /* full-width card */
+    .card-full { grid-column: 1 / -1; }
+
+    /* ── FORM FIELDS ── */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; letter-spacing: 0.4px; }
+    .field input, .field select {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: inherit; font-size: 14px;
+      padding: 10px 14px;
+      color: var(--text);
+      background: #FAFCFF;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--blue-mid); }
+    .field select { appearance: none; cursor: pointer; }
+
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-primary {
+      background: var(--blue-mid); color: white;
+      border: none; border-radius: 10px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      padding: 11px 20px; cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+    .btn-accent {
+      background: var(--accent); color: white;
+      border: none; border-radius: 10px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      padding: 11px 20px; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-accent:hover { background: var(--accent-dark); }
+
+    /* ── QUESTIONS LIST ── */
+    #questionsList { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    #questionsList li {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .q-title {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      cursor: pointer; user-select: none;
+      font-size: 14px; font-weight: 500;
+      background: #FAFCFF;
+      transition: background .15s;
+    }
+    .q-title:hover { background: #EEF3FC; }
+    .q-room-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      background: var(--blue-mid); color: white;
+      border-radius: 5px; padding: 2px 7px; margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .q-text { flex: 1; }
+    .q-del {
+      background: none; border: 1.5px solid #E0E0E0; border-radius: 7px;
+      color: var(--danger); font-size: 12px; font-weight: 700;
+      padding: 4px 9px; cursor: pointer; margin-left: 12px; flex-shrink: 0;
+      transition: background .15s;
+    }
+    .q-del:hover { background: #FFEBEE; }
+    .q-details {
+      padding: 12px 16px;
+      font-size: 13px; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: white;
+      line-height: 1.9;
+    }
+    .q-details strong { color: var(--accent-dark); }
+
+    .filter-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .filter-row select {
+      flex: 1;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-family: inherit; font-size: 14px;
+      padding: 9px 14px; color: var(--text); background: #FAFCFF;
+      outline: none;
+    }
+  </style>
 </head>
 <body>
+  <!-- MODAL RECARGA -->
+<div id="reloadModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title">Recargar panel</div>
 
-  <h1>Panel Administrador</h1>
+    <div class="modal-text">
+      ¿Querés recargar el panel administrador?
+    </div>
 
-<select id="roomCode">
-  <option value="TEST">TEST</option>
-  <option value="EVENTO2026">EVENTO2026</option>
-  <option value="QUIZ123">QUIZ123</option>
-</select>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeReloadModal()">
+        Cancelar
+      </button>
 
-  <button id="startButton" onclick="startGame()">
-  Iniciar partida
+      <button class="modal-btn confirm" onclick="confirmReload()">
+        Recargar
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">
+       <img src="/logo.png" alt="Silfab" class="topbar-logo-img">
+        <ellipse cx="16" cy="16" rx="13" ry="5" stroke="white" stroke-width="1.8"/>
+        <ellipse cx="16" cy="16" rx="13" ry="5" stroke="white" stroke-width="1.8" transform="rotate(60 16 16)"/>
+        <ellipse cx="16" cy="16" rx="13" ry="5" stroke="white" stroke-width="1.8" transform="rotate(120 16 16)"/>
+        <circle cx="16" cy="7" r="3.2" fill="#7CB342"/>
+      </svg>
+      <div>
+        <!--<div class="topbar-logo-text">SIL<span>FAB</span></div>-->
+      </div>
+    </div>
+    <span class="topbar-sub">Panel Administrador · Preguntados Online</span>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Estado de la partida</div>
+        <div class="state-box" id="gameStateBox">
+          Estado: <strong>-</strong><br>
+          Pregunta actual: -<br>
+          Jugadores: -
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Sala activa</div>
+        <select class="sidebar-select" id="roomCode"></select>
+
+        <div class="time-row">
+          <label>Tiempo/pregunta</label>
+          <input type="number" class="time-input" id="questionTime" value="5" min="3" max="30">
+          <span style="color:rgba(255,255,255,.6);font-size:13px">seg</span>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-green" id="startButton" onclick="startGame()">▶ Iniciar partida</button>
+         <!-- <button class="btn btn-ghost" id="restartButton" onclick="restartGame()">↺ Reiniciar partida</button>-->
+         
+          <button class="btn btn-screen" onclick="openScreen()">⛶ Abrir pantalla</button>
+          <button class="btn btn-screen" onclick="showReloadModal()">
+  ↻ Recargar panel
 </button>
+ <button class="btn" style="background: #e5111199; color: white;" onclick="endGame()">
+                     ⛔ Finalizar partida
+           </button>
+        </div>
+      </div>
 
-<hr>
-<hr>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Nuevo evento</div>
+        <input class="sidebar-select" style="margin-bottom:8px" id="newRoom" placeholder="Nombre del evento">
+        <button class="btn btn-ghost" onclick="createRoom()">+ Crear evento</button>
+      </div>
 
-<h3>Crear nuevo evento</h3>
+    </aside>
 
-<input id="newRoom" placeholder="Nombre del evento">
+    <!-- MAIN -->
+    <main class="main">
+      <div class="main-grid">
 
-<button onclick="createRoom()">
-  Crear evento
-</button>
-<h2>Crear pregunta</h2>
+        <!-- CREAR PREGUNTA -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Crear pregunta</div>
+              <div class="card-subtitle">Completá todos los campos</div>
+            </div>
+          </div>
 
-<input
-  type="text"
-  id="question"
-  placeholder="Pregunta"
->
+          <div class="field">
+            <label>Sala</label>
+            <select id="questionRoomCode"></select>
+          </div>
+          <div class="field">
+            <label>Pregunta</label>
+            <input type="text" id="question" placeholder="Escribí la pregunta...">
+          </div>
+          <div class="options-grid">
+            <div class="field"><label>Opción A</label><input type="text" id="option1" placeholder="Opción A"></div>
+            <div class="field"><label>Opción B</label><input type="text" id="option2" placeholder="Opción B"></div>
+            <div class="field"><label>Opción C</label><input type="text" id="option3" placeholder="Opción C"></div>
+            <div class="field"><label>Opción D</label><input type="text" id="option4" placeholder="Opción D"></div>
+          </div>
+          <div class="field">
+            <label>Respuesta correcta (1-4)</label>
+            <input type="number" id="correct" placeholder="1, 2, 3 o 4" min="1" max="4">
+          </div>
+          <button class="btn-accent" style="width:100%" onclick="saveQuestion()">Guardar pregunta</button>
+        </div>
 
-<select id="questionRoomCode"></select>
+        <!-- PREGUNTAS GUARDADAS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+            </div>
+            <div>
+              <div class="card-title">Preguntas guardadas</div>
+              <div class="card-subtitle">Filtrá por sala</div>
+            </div>
+          </div>
+          <div class="filter-row">
+            <select id="filterRoomCode"></select>
+            <button class="btn-primary" onclick="filterQuestions()">Filtrar</button>
+          </div>
+          <ul id="questionsList"></ul>
+        </div>
 
-<br><br>
-
-<br><br>
-
-<input type="text" id="option1" placeholder="Opción A">
-<br><br>
-
-<input type="text" id="option2" placeholder="Opción B">
-<br><br>
-
-<input type="text" id="option3" placeholder="Opción C">
-<br><br>
-
-<input type="text" id="option4" placeholder="Opción D">
-
-<br><br>
-
-<input
-  type="number"
-  id="correct"
-  placeholder="Respuesta correcta (1-4)"
-  min="1"
-  max="4"
->
-
-<br><br>
-
-<button onclick="saveQuestion()">
-  Guardar pregunta
-</button>
-<hr>
-
-<h2>Preguntas guardadas</h2>
-<select id="filterRoomCode"></select>
-<button onclick="filterQuestions()">
-  Filtrar
-</button>
-
-<br><br>
-
-<ul id="questionsList"></ul>
+      </div>
+    </main>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
-
   <script>
-     let rooms = [];
+  const pass = prompt("Ingresá clave admin");
+
+  if (pass !== "Mexico86") {
+    alert("Acceso denegado");
+    window.location.href = "/";
+  }
+    
+  function endGame() {
+  const roomCode = document.getElementById("roomCode").value;
+  if (!roomCode) return alert("Seleccioná una sala");
+
+  const confirmEnd = confirm("¿Seguro que querés finalizar la partida?");
+  if (!confirmEnd) return;
+
+  socket.emit("endGame", { roomCode });
+
+  // 👇 RESET UI LOCAL
+  document.getElementById("startButton").disabled = false;
+  document.getElementById("restartButton").disabled = false;
+}
     const socket = io();
-    let allQuestions = [];
-    socket.emit("getQuestions");
+    let rooms = [], allQuestions = [], lastStates = {};
+
+    socket.emit("joinAdmin");
     socket.emit("getRooms");
+    socket.emit("getQuestions");
+
+    function showReloadModal() {
+  document
+    .getElementById("reloadModal")
+    .classList.add("show");
+}
+
+function closeReloadModal() {
+  document
+    .getElementById("reloadModal")
+    .classList.remove("show");
+}
+
+function confirmReload() {
+  window.location.reload();
+}
+
     function startGame() {
-
-      const roomCode =
-        document.getElementById("roomCode").value.trim();
-            
-      if (!roomCode) {
-        alert("Ingresá un código");
-        return;
-      }
-
+      const roomCode = document.getElementById("roomCode").value.trim();
+      if (!roomCode) return alert("Ingresá un código");
       document.getElementById("startButton").disabled = true;
+      const questionTime = parseInt(document.getElementById("questionTime").value);
+      socket.emit("startGame", { roomCode, questionTime });
+    }
 
-      socket.emit("startGame", {
-        roomCode
-      });
+    function restartGame() {
+      const roomCode = document.getElementById("roomCode").value;
+      const questionTime = parseInt(document.getElementById("questionTime").value);
+      socket.emit("restartGame", { roomCode, questionTime });
+    }
+
+    function saveQuestion() {
+      const question = document.getElementById("question").value.trim();
+      const roomCode = document.getElementById("questionRoomCode").value;
+      const option1 = document.getElementById("option1").value.trim();
+      const option2 = document.getElementById("option2").value.trim();
+      const option3 = document.getElementById("option3").value.trim();
+      const option4 = document.getElementById("option4").value.trim();
+      const correct = document.getElementById("correct").value.trim();
+      if (!question || !option1 || !option2 || !option3 || !option4 || !correct) return alert("Completá todos los campos");
+      socket.emit("saveQuestion", { question, roomCode, options: [option1, option2, option3, option4], correct });
+    }
+
+    function openScreen() {
+      const roomCode = document.getElementById("roomCode").value;
+      if (!roomCode) { alert("Seleccioná una sala"); return; }
+      window.open(`/screen.html?room=${roomCode}`, "_blank");
     }
 
     function createRoom() {
-
-  const room =
-    document.getElementById("newRoom").value.trim();
-
-  if (!room) return;
-
-  socket.emit("createRoom", room);
-
-}
-
-const filterSelect =
-  document.getElementById("filterRoomCode");
-
-filterSelect.innerHTML = "";
-
-rooms.forEach((room) => {
-
-  const option = document.createElement("option");
-
-  option.value = room;
-  option.innerText = room;
-
-  filterSelect.appendChild(option);
-
-});
-function saveQuestion() {
-
-  const question =
-    document.getElementById("question").value.trim();
-
-const roomCode =
-  document.getElementById("questionRoomCode").value;
-
-  const option1 =
-    document.getElementById("option1").value.trim();
-
-  const option2 =
-    document.getElementById("option2").value.trim();
-
-  const option3 =
-    document.getElementById("option3").value.trim();
-
-  const option4 =
-    document.getElementById("option4").value.trim();
-
-  const correct =
-    document.getElementById("correct").value.trim();
-
-  if (
-    !question ||
-    !option1 ||
-    !option2 ||
-    !option3 ||
-    !option4 ||
-    !correct
-  ) {
-    alert("Completá todos los campos");
-    return;
-  }
-
-
-  socket.emit("saveQuestion", {
-    question,
-    roomCode,
-    options: [
-      option1,
-      option2,
-      option3,
-      option4
-    ],
-    correct
-  });
-
-}
-socket.on("roomsList", (data) => {
-
-  rooms = data;
-
-  // SELECT principal (start game)
-  const select =
-    document.getElementById("roomCode");
-
-  select.innerHTML = "";
-
-  rooms.forEach((room) => {
-
-    const option =
-      document.createElement("option");
-
-    option.value = room;
-    option.innerText = room;
-
-    select.appendChild(option);
-
-  });
-
-  // SELECT de preguntas
-  const selectQuestion =
-    document.getElementById("questionRoomCode");
-
-  selectQuestion.innerHTML = "";
-
-  rooms.forEach((room) => {
-
-    const option =
-      document.createElement("option");
-
-    option.value = room;
-    option.innerText = room;
-
-    selectQuestion.appendChild(option);
-
-  });
-  // SELECT de filtro
-
-
-  filterSelect.innerHTML = "";
-
-  rooms.forEach((room) => {
-
-    const option = document.createElement("option");
-
-    option.value = room;
-    option.innerText = room;
-
-    filterSelect.appendChild(option);
-
-  });
-});
-
-function renderQuestions(questions) {
-
-  const questionsList =
-    document.getElementById("questionsList");
-
-  questionsList.innerHTML = "";
-
-  questions.forEach((question) => {
-
-    const li = document.createElement("li");
-
-    li.style.cursor = "pointer";
-
-    // 🔹 header de la pregunta
-    const title = document.createElement("div");
-    title.innerText =
-      "[" + question.roomCode + "] " + question.question;
-
-    // 🔹 contenedor de detalles oculto
-    const details = document.createElement("div");
-    details.style.display = "none";
-    details.style.marginLeft = "15px";
-
-    details.innerHTML = `
-      <p>A: ${question.options[0]}</p>
-      <p>B: ${question.options[1]}</p>
-      <p>C: ${question.options[2]}</p>
-      <p>D: ${question.options[3]}</p>
-      <strong>Correcta: ${question.correct}</strong>
-    `;
-
-    // 🔹 toggle click
-    title.onclick = () => {
-      details.style.display =
-        details.style.display === "none" ? "block" : "none";
-    };
-
-    // botón borrar
-    const deleteButton =
-      document.createElement("button");
-
-    deleteButton.innerText = "X";
-
-    deleteButton.onclick = (e) => {
-      e.stopPropagation(); // evita abrir/cerrar
-
-      const confirmDelete = confirm(
-        "¿Seguro que querés eliminar esta pregunta?"
-      );
-
-      if (!confirmDelete) return;
-
-      socket.emit("deleteQuestion", question.id);
-    };
-
-    li.appendChild(title);
-    li.appendChild(details);
-    li.appendChild(deleteButton);
-
-    questionsList.appendChild(li);
-  });
-}
-function filterQuestions() {
-
-  const filterRoomCode =
-    document.getElementById("filterRoomCode").value;
-
-  const filteredQuestions =
-    allQuestions.filter(q =>
-      q.roomCode === filterRoomCode
-    );
-
-  renderQuestions(filteredQuestions);
-
-}
-socket.on("questionsList", (questions) => {
-
-  allQuestions = questions;
-
-  renderQuestions(questions);
-
-});
-
+      const name = document.getElementById("newRoom").value.trim();
+      if (name) socket.emit("createRoom", name);
+    }
+
+    function renderQuestions(questions) {
+      const list = document.getElementById("questionsList");
+      list.innerHTML = "";
+      questions.forEach(q => {
+        const li = document.createElement("li");
+        const title = document.createElement("div");
+        title.className = "q-title";
+        title.innerHTML = `<span class="q-room-tag">${q.roomCode}</span><span class="q-text">${q.question}</span>`;
+
+        const details = document.createElement("div");
+        details.className = "q-details";
+        details.style.display = "none";
+        details.innerHTML = `A: ${q.options[0]}<br>B: ${q.options[1]}<br>C: ${q.options[2]}<br>D: ${q.options[3]}<br><strong>✓ Correcta: opción ${q.correct}</strong>`;
+
+        const del = document.createElement("button");
+        del.className = "q-del"; del.innerText = "✕";
+        del.onclick = (e) => { e.stopPropagation(); if (confirm("¿Eliminar pregunta?")) socket.emit("deleteQuestion", q.id); };
+
+        title.appendChild(del);
+        title.onclick = () => { details.style.display = details.style.display === "none" ? "block" : "none"; };
+
+        li.appendChild(title); li.appendChild(details);
+        list.appendChild(li);
+      });
+    }
+
+    function filterQuestions() {
+      const room = document.getElementById("filterRoomCode").value;
+      renderQuestions(allQuestions.filter(q => q.roomCode === room));
+    }
+
+    socket.on("roomsList", (data) => {
+      rooms = data;
+      ["roomCode", "questionRoomCode", "filterRoomCode"].forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = "";
+        rooms.forEach(r => { const o = document.createElement("option"); o.value = r; o.innerText = r; el.appendChild(o); });
+      });
+    });
+
+    socket.on("questionsList", (q) => { allQuestions = q; renderQuestions(q); });
+
+    socket.on("gameStateUpdate", (state) => {
+      const box = document.getElementById("gameStateBox");
+      const status = state.isPlaying ? "<strong style='color:#7CB342'>EN CURSO</strong>" : "<strong style='color:#FF7043'>FINALIZADO</strong>";
+      box.innerHTML = `Estado: ${status}<br>Pregunta: ${state.currentQuestion?.question || "-"}<br>Jugadores: ${state.players}`;
+      lastStates[state.roomCode] = state;
+    });
+
+    socket.on("adminMessage", (d) => { if (d.type === "error") alert(d.text); });
+    socket.on("gameStarted", () => { document.getElementById("restartButton").disabled = true; });
+    socket.on("gameFinished", () => { document.getElementById("restartButton").disabled = false; });
   </script>
-
 </body>
 </html>
